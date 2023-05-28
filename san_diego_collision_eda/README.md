@@ -1,14 +1,14 @@
 # San Diego Collision EDA
 Exploratory data analysis project using Tableau for analyzing San Diego County Collision since 2016
 
-## Overview
+# Overview
 - Grabbed original dataset from City of San Diego Open Data Portal, [Traffic Collisions - basic reports](https://data.sandiego.gov/datasets/police-collisions/) and [Police Beats](https://data.sandiego.gov/datasets/police-beats/) and grid map of San Diego from [SanGis](https://www.sangis.org/)
 - Applied geocoding to unique addresses using Python and Google Geocoding API
 - Stored latitude, longitude, zipcode in SQLite database
 - Engineered features from the text of each unique charge description to group them into larger categories
 - Created interactive visualization with Tableau so that viewers can look at specific location in San Diego County
 
-### Data Collection
+## Data Collection
 **Traffic Collisions - basic reports** dataset contains the following columns and rows.
 
 |    |   report_id | date_time           |   police_beat |   address_no_primary | address_pd_primary   | address_road_primary   | address_sfx_primary   | address_pd_intersecting   | address_name_intersecting   | address_sfx_intersecting   | violation_section   | violation_type   | charge_desc                                            |   injured |   killed | hit_run_lvl   |
@@ -23,8 +23,4 @@ Exploratory data analysis project using Tableau for analyzing San Diego County C
 
 The grid map of San Diego downloaded from SanGis
 
-<img
-  src="/imh/sd_grid.png",
-  alt="Grid map of San Diego",
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
-  
+![Grid map of San Diego](img/sd_grid.png)
