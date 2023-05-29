@@ -22,7 +22,15 @@ Exploratory data analysis project using Tableau for analyzing San Diego County C
 |  4 |      185207 | 2015-07-06 11:45:00 |           813 |                 2800 |                      | EL CAJON               | BOULEVARD             |                           |                             |                            | 20002(A)            | VC               | HIT AND RUN                                            |         0 |        0 | MISDEMEANOR   |
 
 #### Police Beats
-Contains the mapping of police_beat values to name of neighbors in San Diego.
+|    |   beat | neighborhood         |
+|---:|-------:|:---------------------|
+|  0 |    111 | Clairemont Mesa East |
+|  1 |    112 | Clairemont Mesa West |
+|  2 |    113 | Bay Ho               |
+|  3 |    114 | North Clairemont     |
+|  4 |    115 | University City      |
+
+![Map of Police Beats](img/sd_beat.png)
 
 #### Grid map of San Diego 
 ![Grid map of San Diego](img/sd_grid.png)
@@ -30,7 +38,9 @@ Contains the mapping of police_beat values to name of neighbors in San Diego.
 ### Geocoding
 Used the following [script](https://github.com/bbeat2782/Projects/blob/main/san_diego_collision_eda/retrieve_geocode.ipynb) to geocode addresses and store in a SQLite database.
 
-![SQLite database](img/sqlite_db.png)
+![SQLite database](img/sqlite_db.png | width=100)
+
+<img src="img/sqlite_db.png" height="30%">
 
 ## Data Cleaning
 Because charge_desc (charge description) values in the **Traffic Collisions - basic reports** are hand recorded by different police officers, different abbreviations and wordings are used throughout the rows. Thus, I needed to group them into higher level categories. Below is a sample mapping.
@@ -43,7 +53,9 @@ Because charge_desc (charge description) values in the **Traffic Collisions - ba
 |   3 | PEDESTRIAN NOT TO SUDDENLY ENTER PATH, ETC        | pedestrian            |
 |   4 | FAIL TO STOP AT LIMIT LINE AT RR CROSSING (I)     | stop violation        |
 
-Geocoding
+Geocoding cleaning
+
+shp file cleaning
 
 ## Visualization
 [![Tableau Dashboard](img/tableau_dashboard.png)](https://public.tableau.com/app/profile/sanggyu.an/viz/SanDiegoCollisionSummary/Dashboard1)
