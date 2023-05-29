@@ -8,11 +8,16 @@ Exploratory data analysis project using Tableau for analyzing San Diego County C
 - Engineered features from the text of each unique charge description to group them into larger categories
 - Created interactive visualization with Tableau so that viewers can look at specific location in San Diego County
 
+# (Why)
+(Why I started this project)
+
 ## Data Collection
 
 ### Original dataset
 
 #### Traffic Collisions - basic reports
+The following is a sample rows from the dataset that contains record from 2015 January to 2023 May. It's downloaded from City of San Diego Open Data Portal, and it updates daily.
+
 |    |   report_id | date_time           |   police_beat |   address_no_primary | address_pd_primary   | address_road_primary   | address_sfx_primary   | address_pd_intersecting   | address_name_intersecting   | address_sfx_intersecting   | violation_section   | violation_type   | charge_desc                                            |   injured |   killed | hit_run_lvl   |
 |---:|------------:|:--------------------|--------------:|---------------------:|:---------------------|:-----------------------|:----------------------|:--------------------------|:----------------------------|:---------------------------|:--------------------|:-----------------|:-------------------------------------------------------|----------:|---------:|:--------------|
 |  0 |      171111 | 2015-01-14 20:00:00 |           835 |                 4200 |                      | JUNIPER                | STREET                |                           |                             |                            | MISC-HAZ            | VC               | MISCELLANEOUS HAZARDOUS VIOLATIONS OF THE VEHICLE CODE |         0 |        0 | MISDEMEANOR   |
@@ -22,6 +27,8 @@ Exploratory data analysis project using Tableau for analyzing San Diego County C
 |  4 |      185207 | 2015-07-06 11:45:00 |           813 |                 2800 |                      | EL CAJON               | BOULEVARD             |                           |                             |                            | 20002(A)            | VC               | HIT AND RUN                                            |         0 |        0 | MISDEMEANOR   |
 
 #### Police Beats
+The following is a mapping of *police_beat* values from the above dataset into neighbor names in San Diego. It also contains the shp files of each neighbors.
+
 |    |   beat | neighborhood         |
 |---:|-------:|:---------------------|
 |  0 |    111 | Clairemont Mesa East |
@@ -32,17 +39,19 @@ Exploratory data analysis project using Tableau for analyzing San Diego County C
 
 ![Map of Police Beats](img/sd_beat.png)
 
-#### Grid map of San Diego 
+#### Grid Map of San Diego 
+The following is a sub grid of the Regional Public Safety Geodatabase's Public Safety Grid. Each grid is about 0.3 miles * 0.6 miles (width * height).
+
 ![Grid map of San Diego](img/sd_grid.png)
 
 ### Geocoding
-Used the following [script](https://github.com/bbeat2782/Projects/blob/main/san_diego_collision_eda/retrieve_geocode.ipynb) to geocode addresses and store in a SQLite database.
+Used this [script](https://github.com/bbeat2782/Projects/blob/main/san_diego_collision_eda/retrieve_geocode.ipynb) to geocode addresses using Google Geocoding API and store in a SQLite database.
 
-![SQLite database](img/sqlite_db.png | width=100)
-
-<img src="img/sqlite_db.png" height="30%">
+![SQLite database](img/sqlite_db.png)
 
 ## Data Cleaning
+
+#### charge_desc Mapping
 Because charge_desc (charge description) values in the **Traffic Collisions - basic reports** are hand recorded by different police officers, different abbreviations and wordings are used throughout the rows. Thus, I needed to group them into higher level categories. Below is a sample mapping.
 
 |     | original_cause                                    | abbreviate_cause      |
@@ -53,9 +62,22 @@ Because charge_desc (charge description) values in the **Traffic Collisions - ba
 |   3 | PEDESTRIAN NOT TO SUDDENLY ENTER PATH, ETC        | pedestrian            |
 |   4 | FAIL TO STOP AT LIMIT LINE AT RR CROSSING (I)     | stop violation        |
 
-Geocoding cleaning
+#### Geocoding Cleaning
+Google Geocoding API were unable to locate some addresses due to incorrect address and unable to understanding Spanish abbreviations of address such as CAM for Camino and CMT for Caminito. Thus, I needed to confirm those by hand.
 
-shp file cleaning
+#### Shape File Cleaning
+Since I'm only interested in collisions in San Diego, I used the shp file from **Police Beats** to only extract grids that overlap with polygons from **Police Beats**
+
+```
+# using intersects() from geopandas
+extract_necessary_grids = [np.any(police_beat['geometry'].intersects(g)) for g in sd_grid['geometry']]
+sd_grid_trim = sd_grid[extract_necessary_grids]
+```
+
+![Grid map of beat](img/sd_beat_grid.png)
 
 ## Visualization
+
+(add explanation of the visualization)
+
 [![Tableau Dashboard](img/tableau_dashboard.png)](https://public.tableau.com/app/profile/sanggyu.an/viz/SanDiegoCollisionSummary/Dashboard1)
