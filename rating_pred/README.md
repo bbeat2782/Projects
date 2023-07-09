@@ -2,7 +2,7 @@
 Predicting [Metacritic](https://www.metacritic.com/movie) user ratings with data available before a movie is released such as critic reviews, critic ratings, and genre.
 
 # Why it matters?
-Often times, you see a bad review from critic and think that you won't enjoy the movie. However, when you go to theater and watch the film for yourself, you find out you actually enjoy the movie. This happened to me when I watched [Extraction 2](https://www.metacritic.com/movie/extraction-2), [Transformers: Rise of the Beasts](https://www.metacritic.com/movie/transformers-rise-of-the-beasts), and [Guardians of the Galaxy Vol. 3](https://www.metacritic.com/movie/guardians-of-the-galaxy-vol-3). The opposite situation also happened for movies like (Renfield)[https://www.metacritic.com/movie/renfield], and sometimes, critic ratings are similar to user ratings such as [Fast X](https://www.metacritic.com/movie/fast-x).
+Often times, you see a bad review from critic and think that you won't enjoy the movie. However, when you go to theater and watch the film for yourself, you find out you actually enjoy the movie. This happened to me when I watched [Extraction 2](https://www.metacritic.com/movie/extraction-2), [Transformers: Rise of the Beasts](https://www.metacritic.com/movie/transformers-rise-of-the-beasts), and [Guardians of the Galaxy Vol. 3](https://www.metacritic.com/movie/guardians-of-the-galaxy-vol-3). The opposite situation also happened for movies like [Renfield](https://www.metacritic.com/movie/renfield), and sometimes, critic ratings are similar to user ratings such as [Fast X](https://www.metacritic.com/movie/fast-x).
 
 So it seems like how critic and user rate the same movie are different, and that leads to different overall rating. It makes sense because while users generally watch movies for enjoyment, critics expect movies to be an artpiece. Thus, if users take in what critics say about a movie and watch it, they might not get what they want from watching movies. So what if we can expect users ratings with text features from critic reviews? If this is possible, users will have a better understanding of what to expect from movies better than before. 
 
@@ -92,4 +92,17 @@ From the code block above,
 
 ## Visualization
 
-<iframe src="plots/num_review_comparison.html" width="800" height="600"></iframe>
+![Number of reviews comparison](plots/num_review_comparison.png)
+
+![Mean rating trend](plots/mean_rating_trend.png)
+
+![Rating distribution](plots/rating_distribution.png)
+
+![Association between critic and user](plots/association_btn_critic_user.png)
+
+<div style="position: relative;">
+    <img src="plots/pos.png" alt="Positive score" style="position: absolute; top: 0; left: 0;">
+    <img src="plots/compound.png" alt="Compound score" style="position: absolute; top: 0; right: 0;">
+    <img src="plots/neg.png" alt="Negative score" style="position: absolute; bottom: 0; left: 0;">
+    <img src="plots/neu.png" alt="Neutral score" style="position: absolute; bottom: 0; right: 0;">
+</div>
