@@ -314,6 +314,8 @@ def create_dropdown_hist(df, rating_type):
         barmode="overlay",
         showlegend=False,
         title="Sentiment distribution of rating: 0",
+        xaxis_title="Sentiment score",
+        yaxis_title="Count",
     )
     fig.update_traces(opacity=0.75)
 
@@ -337,7 +339,7 @@ def plot_genre_by_yr(df, genres_vc):
                 x=df[df.apply(lambda r: genre in r.values, axis=1)][col],
                 name=genre,
                 # histnorm = 'probability density',
-                hovertemplate="Rating: %{x}, Proportion: %{y}",
+                hovertemplate="Year: %{x}, Count: %{y}",
             )
         )
 
@@ -347,6 +349,7 @@ def plot_genre_by_yr(df, genres_vc):
                 x=df["year"],
                 # histnorm = 'probability density',
                 name="Total",
+                hovertemplate="Year: %{x}, Count: %{y}",
             )
         )
 
@@ -383,7 +386,7 @@ def plot_genre_by_yr(df, genres_vc):
         ],
         barmode="overlay",
         title="Critics and users rating distribution by genre",
-        xaxis_title="Rating",
+        xaxis_title="Year",
         yaxis_title="Count",
     )
     fig.update_traces(opacity=0.75)
