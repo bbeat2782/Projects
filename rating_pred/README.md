@@ -2,15 +2,15 @@
 Predicting [Metacritic](https://www.metacritic.com/movie) user ratings with data available before a movie is released such as critic reviews, critic ratings, and genre.
 
 # Why it matters?
-Often times, you see a bad review from critic and think that you won't enjoy the movie. However, when you go to theater and watch the film for yourself, you find out you actually enjoy the movie. This happened to me when I watched [Extraction 2](https://www.metacritic.com/movie/extraction-2), [Transformers: Rise of the Beasts](https://www.metacritic.com/movie/transformers-rise-of-the-beasts), and [Guardians of the Galaxy Vol. 3](https://www.metacritic.com/movie/guardians-of-the-galaxy-vol-3). The opposite situation also happened for movies like [Renfield](https://www.metacritic.com/movie/renfield), and sometimes, critic ratings are similar to user ratings such as [Fast X](https://www.metacritic.com/movie/fast-x).
+Oftentimes, you see a bad review of a movie from critics and think that you won't enjoy the movie. However, when you go to a theater and watch the movie for yourself, you find out you actually enjoy the movie. This happened to me when I watched [Extraction 2](https://www.metacritic.com/movie/extraction-2), [Transformers: Rise of the Beasts](https://www.metacritic.com/movie/transformers-rise-of-the-beasts), and [Guardians of the Galaxy Vol. 3](https://www.metacritic.com/movie/guardians-of-the-galaxy-vol-3). The opposite situation also happened for movies like [Renfield](https://www.metacritic.com/movie/renfield), and sometimes, critic ratings are similar to user ratings such as [Fast X](https://www.metacritic.com/movie/fast-x).
 
-So it seems like how critic and user rate the same movie are different, and that leads to different overall rating. It makes sense because while users generally watch movies for enjoyment, critics expect movies to be an artpiece. Thus, if users take in what critics say about a movie and watch it, they might not get what they want from watching movies. So what if we can expect users ratings with text features from critic reviews? If this is possible, users will have a better understanding of what to expect from movies better than before. 
+So it seems like critics and users rate the same movie differently, and that leads to different overall ratings. It makes sense because while users generally watch movies for enjoyment, critics expect movies to be a masterpiece in terms of art. Thus, if users solely believe in what critics say about a movie and watch it, they might not get what they want from watching the movie. So what if we can predict users' ratings with text features from critic reviews? If this is possible, users will have a better understanding of what to expect from movies better than before.
 
 # Overview
 - Websraped movie info, critic reviews, and user reviews from [Metacritic](https://www.metacritic.com/movie) using Python `BeautifulSoup` and stored in `SQLite` database.
 - Extracted text sentiment features using `nltk.sentiment.SentimentIntensityAnalyzer` and keywords using `KeyBERT`.
 - Analyzed scraped data using `plotly`.
-- Improved mean abosolute error by 37.69% when predicting user rating using features from critic reviews compared to assuming user ratings are equal to critic ratings.
+- Improved mean absolute error by 37.69% when predicting user rating using features from critic reviews compared to assuming user ratings are equal to critic ratings.
 
 # Data Collection
 
@@ -18,8 +18,8 @@ Webscraped using this [script](https://github.com/bbeat2782/Projects/blob/rating
 
 ## Original dataset
 
-### 1. `Movie` dataset
-The following is sample rows from `Movie` table that contains all movie information from Metacritic as of 2023 June 16.
+### 1. `Movie` table
+The following are sample rows from the `Movie` table that contains movie information from Metacritic as of 2023 June 16.
 
 |    |             movie_id | movie_title    |   movie_year | movie_summary                                     |   movie_critic_rating |   movie_user_rating |   movie_runtime | movie_genre   | movie_subgenre   | movie_sub2genre   | movie_rating   |   num_critic_pos |   num_critic_mix |   num_critic_neg |   num_user_pos |   num_user_mix |   num_user_neg |
 |---:|---------------------:|:---------------|-------------:|:--------------------------------------------------|----------------------:|--------------------:|----------------:|:--------------|:-----------------|:------------------|:---------------|-----------------:|-----------------:|-----------------:|---------------:|---------------:|---------------:|
@@ -29,8 +29,8 @@ The following is sample rows from `Movie` table that contains all movie informat
 |  3 | -9216529779443115283 | Fired Up!      |         2009 | Shawn and Nick are top scorers on the Ford Hig... |                    31 |                 5.7 |              90 | Comedy        | None             | None              | PG-13          |                2 |                7 |                9 |             19 |             12 |             10 |
 |  4 | -9212162946756563061 | Uncharted      |         2022 | Street-smart Nathan Drake (Tom Holland) is rec... |                    45 |                 6.2 |             116 | Action        | Adventure        | None              | PG-13          |                7 |               33 |                4 |            451 |            169 |            175 |
 
-### 2. `Critics` dataset
-The following is sample rows from `Critics` table that contains all critic review information from the `Movie` table.
+### 2. `Critics` table
+The following are sample rows from the `Critics` table that contains critic review information of movies from the `Movie` table.
 
 |    |   critic_review_id |             movie_id | critic_name        | critic_review                                     | critic_date   |   critic_rating |
 |---:|-------------------:|---------------------:|:-------------------|:--------------------------------------------------|:--------------|----------------:|
@@ -40,8 +40,8 @@ The following is sample rows from `Critics` table that contains all critic revie
 |  3 |             191435 | -1173456695746148219 | Stephanie Zacharek | Disappointingly tame.                             | None          |              50 |
 |  4 |             104342 | -4403818285690920111 | Tim Grierson       | Despite its shortcomings, American Made can be... | Sep 28, 2017  |              72 |
 
-### 3. `Users` dataset
-The following is sample rows from `Users` table that contains all user review information from the `Movie` table.
+### 3. `Users` table
+The following are sample rows from the `Users` table that contains user review information of movies from the Movie table.
 
 |    |   user_review_id |             movie_id | user_review                                       | user_date    |   user_rating |
 |---:|-----------------:|---------------------:|:--------------------------------------------------|:-------------|--------------:|
@@ -54,7 +54,7 @@ The following is sample rows from `Users` table that contains all user review in
 # Data Preprocessing
 
 ### 1. Extracting Sentiment Scores
-With `SentimentIntensityAnalyzer` from the nltk package, I can extract negative, neutral, positive, and compound score of a text.
+With `SentimentIntensityAnalyzer` from the `nltk` package, I extracted negative, neutral, positive, and compound scores of combined reviews from each movie.
 
 ```
 from nltk.sentiment import SentimentIntensityAnalyzer
@@ -63,10 +63,8 @@ sia = SentimentIntensityAnalyzer()
 polarity = sia.polarity_scores(text)
 ```
 
-Running the above code returns the following dictionary format `{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}`. 
-
 ### 2. Extracting Keywords
-With the `KeyBERT` from the keybert package, I can extract keywords from a corpus.
+With the `KeyBERT` from the `keybert` package, I extracted keywords from combined reviews for each possible rating from 0.0 to 10.0.
 
 ```
 kw_model = KeyBERT(model='all-MiniLM-L6-v2')
@@ -79,7 +77,7 @@ kw = kw_model.extract_keywords(corpus,
 
 From the code block above,
 - `keyphrase_ngram_range`: Controls the ngram range of extracted keywords
-- `use_maxsum`: Controls the combination of sum of cosine similarity to be the maximum value from 2 x top_n words to diversify the results
+- `use_maxsum`: Controls the combination of the sum of cosine similarity to be the maximum value from 2 x top_n words to diversify the results
 - `top_n` : Controls the number of keywords to extract
 
 ### Final Dataframe after Preprocessing
@@ -97,7 +95,7 @@ From the code block above,
 ### Number of movies
 - ![Number of movies](plots/num_of_movies.png)
 - #### Observations
-    1. Data were collected beginning in 2023, June 16th, so 2023 has much fewer movies than years before.
+    1. Data were collected in 2023, June 16th, so 2023 has much fewer movies than years before.
     2. The early and mid-1900s have fewer movies than in recent years. This could be an actual difference in movie production or not all films are recorded from the early and mid-1900s.
     3. There are two noticeable declines. One starts in 2006. Another one starts in 2014.
 
@@ -117,21 +115,21 @@ From the code block above,
 - #### Observations
     1. Mean user rating tends to decline, whereas mean critic rating declines at first and increases after 2000.
     2. For movies before 1970, mean critic ratings tend to be higher than mean user ratings. However, after 1970, the trend reverses. This trend reverses again in 2020.
-        - This could be because of how critics and users rate different genres differently and different genres were popular at different times. Or it could be because of a difference in what they value from what they expect from watching a movie.
+        - This could be because of how critics and users rate different genres differently and different genres were popular at different times. Or it could be because of a difference in what they value from watching a movie.
         - Recall that not a lot of movies from the early 1900s are on the Metacritic website. It could be that only critically acclaimed movies are on the website such as [Citizen Kane](https://www.metacritic.com/movie/citizen-kane-1941), [Vertigo](https://www.metacritic.com/movie/vertigo-1958), or [Rear Window](https://www.metacritic.com/movie/rear-window). All these films have a rating of 100 out of 100 from critics but below 10 out of 10 from users. This might be the reason why mean critic ratings are higher than mean user ratings in the early 1900s.
 
 ### Rating distribution comparison
 - ![Rating distribution](plots/rating_distribution.png)
 - #### Observations
     1. Critics rating distribution is closer to a normal distribution than users rating distribution.
-    2. User rating is skewed to the left with a higher overall mean than critics. For each user and critic, overall means are 66.27 and 59.4
+    2. Users' rating is skewed to the left with a higher overall mean than critics' rating. For each user and critic, the overall means are 66.27 and 59.4
 
 ### Association between critic and user
 - ![Association between critic and user](plots/association_btn_critic_user.png)
 - #### Observations
-    1. There is a positive association between critic and user rating.
-    2. The least squares best fit line is **User rating = 0.0357518 * Critic rating + 4.50315**
-            - For 1 increase in critic rating, we can expect user rating to increase by 0.0357518
+    1. There is a positive association between critic and user ratings.
+    2. The least squares best-fit line is **User rating = 0.0357518 * Critic rating + 4.50315**
+        - For 1 increase in critic rating, we can expect user rating to increase by 0.0357518
     3. It shows heteroscedasticity. The variability is higher when the critic rating is low than when it is high.
     4. The max user rating for all ranges of critic ratings tends to stay the same. However, the increase in the min user rating as the critic rating increases is clearly visible.
 
